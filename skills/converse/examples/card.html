@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Converse card</title>
+<!--
+  Converse card: a reusable visual step card.
+  Open this file in a browser. Edit the text inside the card, or copy the
+  structure into your own chat tool. No libraries, no network calls.
+  Licence: MIT, same as the repo.
+-->
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#14181f;--mut:#5b6573;--line:#dde2ea;--chip:#eef1f5;--code:#eef1f5;
+--back1:#fac775;--back2:#c0dd97;--st-bg:#faeeda;--st-ink:#854f0b;--bar:#378add}
+@media (prefers-color-scheme:dark){:root{--bg:#1d232b;--card:#2a323d;--ink:#eef1f5;--mut:#a5afbd;--line:#3a4452;--chip:#343e4b;--code:#222a34;
+--st-bg:#412402;--st-ink:#fac775}}
+body{margin:0;padding:24px 16px;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
+.pc{position:relative;max-width:440px;margin:0 auto;padding:18px 14px}
+.bk{position:absolute;inset:18px 14px;border-radius:22px;transition:background .3s}
+.b1{background:var(--back1);transform:rotate(-4deg) translateX(-8px)}
+.b2{background:var(--back2);transform:rotate(5deg) translateX(10px)}
+.c{position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:10px}
+.k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pill{font-size:12px;background:var(--chip);border-radius:99px;padding:2px 10px;color:var(--mut)}
+h1{margin:0;font-size:21px;line-height:1.2}
+.last{font-size:13px;color:var(--mut)}
+.pin{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:grid;gap:6px}
+.row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:13px}
+.row b{font-weight:400;color:var(--mut)}
+code{font:12px ui-monospace,Menlo,Consolas,monospace;overflow-wrap:anywhere}
+button{font:inherit;font-size:12px;padding:3px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.st{border-radius:12px;padding:9px 12px;background:var(--st-bg);color:var(--st-ink)}
+.st b{display:block;font-size:14px}
+.bars{display:flex;gap:5px}
+.bars span{flex:1;height:7px;border-radius:99px;background:var(--chip)}
+.bars span.on{background:var(--bar)}
+.tools{display:flex;justify-content:space-between;align-items:center}
+details{border-radius:12px;background:var(--chip)}
+summary{cursor:pointer;padding:8px 12px;font-size:13px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary small{font-weight:400;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details[open] summary small{display:none}
+.body{padding:0 12px 10px;font-size:13.5px}
+.demo{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="pc" id="card">
+  <div class="bk b2" id="b2"></div><div class="bk b1" id="b1"></div>
+  <div class="c">
+    <div class="top"><span class="k">Project name</span><span class="pill">T1a · 1 of 6</span></div>
+    <h1>Task title in plain words</h1>
+    <div class="last">Last: one line on the previous task</div>
+
+    <div class="pin">
+      <span class="k">Pinned action</span>
+      <div class="row"><b>R1</b><code id="cmd">echo "one command goes here"</code><button type="button" data-copy="cmd">Copy</button></div>
+    </div>
+
+    <div class="st" id="st"><b id="sw">Waiting</b><span id="sd">Run R1 and paste the result in chat.</span></div>
+    <div class="bars" aria-label="Progress 1 of 6"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
+
+    <div class="tools"><span class="k">Tap a row to open</span><button type="button" id="all">Expand all</button></div>
+    <details><summary>Goal <small>The overall aim in one line</small></summary><div class="body">The overall aim, same wording every time.</div></details>
+    <details><summary>Why <small>One line on why this task exists</small></summary><div class="body">One line on why this task exists.</div></details>
+    <details><summary>Risk <small>Read-only, zero changes</small></summary><div class="body">What it can change. Say "read-only, zero changes" when true.</div></details>
+    <details><summary>How <small>Short numbered steps</small></summary><div class="body">1. First step. 2. Second step.</div></details>
+    <details><summary>Pass looks like <small>Good, warning, fail</small></summary><div class="body">Good result. Warning variant. Fail variant.</div></details>
+    <details><summary>Next <small>T1b, the next task</small></summary><div class="body">T1b: the task that unlocks after this one.</div></details>
+  </div>
+</div>
+
+<div class="demo" id="demo">
+  <button type="button" data-s="Waiting">Waiting</button>
+  <button type="button" data-s="Working">Working</button>
+  <button type="button" data-s="Done">Done</button>
+  <button type="button" data-s="Risk">Risk</button>
+  <button type="button" data-s="Blocked">Blocked</button>
+</div>
+
+<script>
+var S={
+Waiting:["#fac775","#c0dd97","#faeeda","#854f0b","The ball is with you."],
+Working:["#85b7eb","#b5d4f4","#e6f1fb","#0c447c","The assistant is running something."],
+Done:["#97c459","#c0dd97","#eaf3de","#27500a","Task passed."],
+Risk:["#fac775","#ef9f27","#faeeda","#854f0b","Passed, with a flagged risk."],
+Blocked:["#f09595","#f7c1c1","#fcebeb","#791f1f","Failed or cannot proceed, with the reason."]};
+function setState(n){
+  var s=S[n],st=document.getElementById("st");
+  document.getElementById("b1").style.background=s[0];
+  document.getElementById("b2").style.background=s[1];
+  st.style.background=s[2];st.style.color=s[3];
+  document.getElementById("sw").textContent=n;
+  document.getElementById("sd").textContent=s[4];
+}
+var d=document.querySelectorAll("#demo button");
+for(var i=0;i<d.length;i++){d[i].addEventListener("click",function(){setState(this.getAttribute("data-s"));});}
+
+var rows=document.querySelectorAll("details"),all=document.getElementById("all"),open=false;
+all.addEventListener("click",function(){
+  open=!open;
+  for(var j=0;j<rows.length;j++){rows[j].open=open;}
+  all.textContent=open?"Collapse all":"Expand all";
+});
+
+var cp=document.querySelectorAll("[data-copy]");
+for(var k=0;k<cp.length;k++){cp[k].addEventListener("click",function(){
+  var el=document.getElementById(this.getAttribute("data-copy")),b=this;
+  function sel(){var r=document.createRange();r.selectNodeContents(el);var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent="Selected";}
+  try{navigator.clipboard.writeText(el.textContent).then(function(){b.textContent="Copied";},sel);}catch(e){sel();}
+});}
+</script>
+</body>
+</html>
