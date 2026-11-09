@@ -23,6 +23,3 @@ Thanks for improving agent-skills. Each skill lives in its own folder under `ski
 3. Add a line to the skill's `CHANGELOG.md`, if it has one.
 4. Open a pull request and describe the problem it solves in one or two sentences.
 
-## Conduct
-
-Be kind and specific. Critique the change, not the person.
