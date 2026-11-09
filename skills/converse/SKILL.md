@@ -20,11 +20,12 @@ Skip it for one-shot questions, essays, or work the assistant can complete alone
 ## The loop
 
 1. Show one card for one task.
-2. The person does the task and pastes the result.
+2. The person does the task and pastes the result, or sends a screenshot.
 3. The assistant checks the result against the card's pass criteria.
-4. Pass: mark the task done and show the next card.
-   Pass with a risk: say the risk in one line, then continue.
-   Fail: stay on the same task, diagnose, and give a corrected card. Do not move on until it passes.
+4. The assistant acts on the outcome:
+   - Pass: mark the task done and show the next card.
+   - Pass with a risk: say the risk in one line, then continue.
+   - Fail: stay on the same task, diagnose, and give a corrected card. Do not move on until it passes.
 
 Never show two tasks at once. Never skip ahead because the result "looks fine" without checking it. If a result cannot be verified, say so on the next card instead of marking it passed.
 
@@ -93,9 +94,11 @@ Pick the richest tier the environment supports, in this order:
 
 1. Inline visual card in the chat, with collapsible rows, the pinned action at the top and a copy control.
 2. A small published page that is updated each step, only if the person asks for a link.
-3. Plain Markdown: a block quote with the fields above, followed by the command in a code block.
+3. Plain Markdown: a block quote with a bold title line, then one bullet per field, followed by the command in a code block.
 
-In every tier the pinned action must be easy to copy. In tier 3, put it directly under the card. Do not use tables inside the card for tier 3, since many renderers break them.
+For tier 3, do not put the fields on consecutive plain quote lines, because GitHub and many other renderers join them into one paragraph. Do not use tables inside the card.
+
+In every tier the pinned action must be easy to copy. In tier 3, put it directly under the card.
 
 ## Style
 
@@ -108,11 +111,14 @@ In every tier the pinned action must be easy to copy. In tier 3, put it directly
 ## Example (Markdown tier)
 
 > **T1a: Find your clusters** · 0 of 7 · Waiting
-> Goal: App connects with a short-lived token, no password.
-> Why: We need a cluster name before we can check anything.
-> Risk: Read-only, zero changes.
-> Pass looks like: At least one cluster listed. Empty list means we plan a test cluster. An error means we fix login first.
-> Next: T1b, pick a cluster and check its settings.
+>
+> - Last: none yet
+> - Do: R1, the command below
+> - Goal: App connects with a short-lived token, no password.
+> - Why: We need a cluster name before we can check anything.
+> - Risk: Read-only, zero changes.
+> - Pass looks like: At least one cluster listed. Empty list means we plan a test cluster. An error means we fix login first.
+> - Next: T1b, pick a cluster and check its settings.
 
 R1
 
