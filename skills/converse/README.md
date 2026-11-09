@@ -17,8 +17,9 @@ It suits work where you do the typing: setting something up, running a proof of 
 3. On a new line, add a request like this:
 
 ```text
-Use the Converse skill. Help me set up a Postgres database on my laptop. I will run the commands and paste the results back.
-```
+Use the Converse skill.
+Help me set up a Postgres database on my laptop.
+I will run the commands and paste the results back.```
 
 4. Do the one task on the first card. Paste the result (or a screenshot) back. The assistant checks it and gives you the next card.
 
