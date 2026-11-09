@@ -4,9 +4,9 @@ Skills, conversation formats and notes for working with AI agents.
 
 ## Skills
 
-| Skill | What it does |
-|---|---|
-| [converse](skills/converse/) | Guided conversations, one validated step at a time |
+| Skill | What it does | Start here |
+| --- | --- | --- |
+| [converse](skills/converse/) | Guided conversations, one validated step at a time | [Quick start](skills/converse/README.md) |
 
 ## Using a skill
 
